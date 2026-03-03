@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Layanan;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'petugas@kampus.test',
             'password' => Hash::make('password123'),
             'role' => 'petugas',
+        ]);
+        Layanan::create([
+            'nama' => 'Keuangan',
+            'kode' => 'TU'
         ]);
     }
 }
