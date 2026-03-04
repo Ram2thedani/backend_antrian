@@ -47,7 +47,28 @@ class AntrianController extends Controller
             'data' => $antrian
         ], 201);
     }
-
+    /**
+     * Call next queue.
+     *
+     * @group Antrian
+     * @authenticated
+     *
+     * Mengambil antrian berikutnya untuk loket yang sedang login.
+     *
+     * @response 200 {
+     *   "message": "Antrian dipanggil",
+     *   "data": {
+     *     "id": 4,
+     *     "nomor_antrian": "INF-001",
+     *     "status": "dipanggil",
+     *     "dipanggil_pada": "2026-03-04 12:23:29"
+     *   }
+     * }
+     *
+     * @response 404 {
+     *   "message": "Tidak ada antrian menunggu"
+     * }
+     */
     public function callNext(Request $request)
     {
         $user = $request->user();
@@ -105,7 +126,11 @@ class AntrianController extends Controller
             'data' => $antrian
         ]);
     }
-
+    /**
+     * Menampilkan nomor antrian yang sedang dilayani di 1 layanan.
+     *
+     * @group Antrian
+     */
     public function nowServing($layanan_id)
     {
         $today = now()->toDateString();

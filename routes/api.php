@@ -11,16 +11,16 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/layanans', [LayananController::class, 'index']);
-Route::post('/antrians', [AntrianController::class, 'store']);
-Route::get('/antrians/now-serving/{layanan}', [AntrianController::class, 'nowServing']);
+Route::get('/layanan', [LayananController::class, 'index']);
+Route::post('/antrian', [AntrianController::class, 'store']);
+Route::get('/antrian/now-serving/{layanan}', [AntrianController::class, 'nowServing']);
 Route::get('/display/now-serving', [AntrianController::class, 'displayNowServing']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/antrians/call-next', [AntrianController::class, 'callNext']);
-    Route::post('/antrians/{antrian}/skip', [AntrianController::class, 'skip']);
-    Route::post('/antrians/{antrian}/finish', [AntrianController::class, 'finish']);
-    Route::get('/antrians/waiting/{layanan}', [AntrianController::class, 'waitingList']);
+    Route::post('/antrian/call-next', [AntrianController::class, 'callNext']);
+    Route::post('/antrian/{antrian}/skip', [AntrianController::class, 'skip']);
+    Route::post('/antrian/{antrian}/finish', [AntrianController::class, 'finish']);
+    Route::get('/antrian/waiting/{layanan}', [AntrianController::class, 'waitingList']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

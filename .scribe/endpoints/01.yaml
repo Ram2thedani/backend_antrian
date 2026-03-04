@@ -1,0 +1,110 @@
+name: Antrian
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/antrian/now-serving/{layanan}'
+    metadata:
+      custom: []
+      groupName: Antrian
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Menampilkan nomor antrian yang sedang dilayani di 1 layanan.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      layanan:
+        custom: []
+        name: layanan
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      layanan: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/antrian/call-next
+    metadata:
+      custom: []
+      groupName: Antrian
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Call next queue.'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "message": "Antrian dipanggil",
+            "data": {
+              "id": 4,
+              "nomor_antrian": "INF-001",
+              "status": "dipanggil",
+              "dipanggil_pada": "2026-03-04 12:23:29"
+            }
+          }
+        headers: []
+        description: ''
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+            "message": "Tidak ada antrian menunggu"
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
