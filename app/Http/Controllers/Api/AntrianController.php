@@ -88,26 +88,28 @@ class AntrianController extends Controller
         ]);
     }
 
-    public function nowServing(Layanan $layanan)
+    public function nowServing($layanan_id)
     {
         $today = now()->toDateString();
 
-        $current = Antrian::where('layanan_id', $layanan->id)
+        $current = Antrian::where('layanan_id', $layanan_id)
             ->whereDate('tanggal', $today)
             ->where('status', 'dipanggil')
-            ->latest('dipanggil_pada')
             ->first();
 
-        if (!$current) {
-            return response()->json([
-                'message' => 'Belum ada antrian dipanggil',
-                'data' => null
-            ]);
-        }
+        $waitingCount = Antrian::where('layanan_id', $layanan_id)
+            ->whereDate('tanggal', $today)
+            ->where('status', 'menunggu')
+            ->count();
 
         return response()->json([
-            'message' => 'Antrian sedang dipanggil',
-            'data' => $current
+            'message' => $current
+                ? 'Antrian sedang dipanggil'
+                : 'Belum ada antrian dipanggil',
+            'data' => [
+                'current' => $current,
+                'jumlah_menunggu' => $waitingCount,
+            ]
         ]);
     }
 
