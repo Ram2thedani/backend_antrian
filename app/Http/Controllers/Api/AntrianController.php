@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Antrian;
 use App\Models\Layanan;
+use App\Models\Loket;
 use Illuminate\Support\Facades\DB;
 
 class AntrianController extends Controller
@@ -49,15 +50,31 @@ class AntrianController extends Controller
 
     public function callNext(Request $request)
     {
-        $request->validate([
-            'layanan_id' => 'required|exists:layanans,id'
-        ]);
+        $user = $request->user();
 
-        $antrian = DB::transaction(function () use ($request) {
+        if (!$user->loket_id) {
+            return response()->json([
+                'message' => 'User belum terhubung ke loket'
+            ], 403);
+        }
+
+        $loket = $user->loket;
+
+        $antrian = DB::transaction(function () use ($loket) {
 
             $today = now()->toDateString();
 
-            $nextQueue = Antrian::where('layanan_id', $request->layanan_id)
+            // Close previous queue for THIS loket
+            Antrian::where('loket_id', $loket->id)
+                ->whereDate('tanggal', $today)
+                ->where('status', 'dipanggil')
+                ->update([
+                    'status' => 'selesai',
+                    'selesai_pada' => now(),
+                ]);
+
+            // Get next waiting queue
+            $nextQueue = Antrian::where('layanan_id', $loket->layanan_id)
                 ->whereDate('tanggal', $today)
                 ->where('status', 'menunggu')
                 ->lockForUpdate()
@@ -71,6 +88,7 @@ class AntrianController extends Controller
             $nextQueue->update([
                 'status' => 'dipanggil',
                 'dipanggil_pada' => now(),
+                'loket_id' => $loket->id,
             ]);
 
             return $nextQueue;
@@ -92,24 +110,14 @@ class AntrianController extends Controller
     {
         $today = now()->toDateString();
 
-        $current = Antrian::where('layanan_id', $layanan_id)
+        $current = Antrian::with('loket')
+            ->where('layanan_id', $layanan_id)
             ->whereDate('tanggal', $today)
             ->where('status', 'dipanggil')
-            ->first();
-
-        $waitingCount = Antrian::where('layanan_id', $layanan_id)
-            ->whereDate('tanggal', $today)
-            ->where('status', 'menunggu')
-            ->count();
+            ->get();
 
         return response()->json([
-            'message' => $current
-                ? 'Antrian sedang dipanggil'
-                : 'Belum ada antrian dipanggil',
-            'data' => [
-                'current' => $current,
-                'jumlah_menunggu' => $waitingCount,
-            ]
+            'data' => $current
         ]);
     }
 

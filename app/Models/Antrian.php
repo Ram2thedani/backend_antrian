@@ -14,9 +14,15 @@ class Antrian extends Model
         'status',
         'dipanggil_pada',
         'selesai_pada',
+        'loket_id'
     ];
     public function layanan()
     {
         return $this->belongsTo(Layanan::class);
+    }
+
+    public function loket()
+    {
+        return $this->belongsTo(Loket::class);
     }
 }

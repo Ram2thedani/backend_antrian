@@ -24,6 +24,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function loket()
+    {
+        return $this->belongsTo(Loket::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

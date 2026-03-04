@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'tu1',
             'password' => Hash::make('123'),
             'role' => 'petugas',
+            'loket_id' => 1,
         ]);
         Layanan::create([
             'nama' => 'Keuangan',

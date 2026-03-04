@@ -15,4 +15,9 @@ class Layanan extends Model
     {
         return $this->hasMany(Antrian::class);
     }
+
+    public function lokets()
+    {
+        return $this->hasMany(Loket::class);
+    }
 }
